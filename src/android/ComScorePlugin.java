@@ -2,6 +2,7 @@ package com.comscoreplugin;
 
 import com.comscore.Analytics;
 import com.comscore.PublisherConfiguration;
+import static com.comscore.UsagePropertiesAutoUpdateMode.FOREGROUND_ONLY;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -14,12 +15,8 @@ public class ComScorePlugin extends CordovaPlugin {
 
     public static final String TAG = "ComScorePlugin";
     public static final String SETCUSTOMERDATA = "setCustomerData";
-    public static final String SETAPPNAME = "setAppName";
-    public static final String SETAPPCONTEXT = "setAppContext";
     public static final String ONENTERFOREGROUND = "onEnterForeground";
     public static final String ONEXITFOREGROUND = "onExitForeground";
-    public static final String AUTOUPDATEFOREGROUND = "autoUpdateForeground";
-    public static final String AUTOUPDATEBACKGROUND = "autoUpdateBackground";
     public static final String START = "start";
 
 
@@ -32,30 +29,12 @@ public class ComScorePlugin extends CordovaPlugin {
             this.setCustomerData(args.getString(0), args.getString(1), callbackContext);
             result = true;
         }
-        else if (SETAPPNAME.equals(action)) {
-            this.setAppName(args.getString(0), callbackContext);
-            result = true;
-        }
-        else if (SETAPPCONTEXT.equals(action)) {
-            this.setAppContext(callbackContext);
-            result = true;
-        }
         else if (ONENTERFOREGROUND.equals(action)) {
             this.onEnterForeground(callbackContext);
             result = true;
         }
         else if (ONEXITFOREGROUND.equals(action)) {
             this.onExitForeground(callbackContext);
-            result = true;
-        }
-        else if (AUTOUPDATEFOREGROUND.equals(action)) {
-            Integer interval = Integer.parseInt(args.getString(0));
-            this.autoUpdateForeground(interval, callbackContext);
-            result = true;
-        }
-        else if (AUTOUPDATEBACKGROUND.equals(action)) {
-            Integer interval = Integer.parseInt(args.getString(0));
-            this.autoUpdateBackground(interval, callbackContext);
             result = true;
         }
         else if (START.equals(action)) {
@@ -69,15 +48,14 @@ public class ComScorePlugin extends CordovaPlugin {
 
     @Override
     protected void pluginInitialize() {
-        //Analytics.setAppContext(this.webView.getContext());
-        Log.v(TAG, "pluginInitialize setAppContext");
+        Log.v(TAG, "pluginInitialize");
     }
 
     private void setCustomerData(String customerID, String customerKey, CallbackContext callbackContext) {
         PublisherConfiguration myPublisherConfig = new PublisherConfiguration.Builder()
                 .publisherId(customerID)
                 .publisherSecret(customerKey)
-                //.usagePropertiesAutoUpdateMode(usagePropertiesAutoUpdateMode.FOREGROUND_ONLY)
+                .usagePropertiesAutoUpdateMode(FOREGROUND_ONLY)
                 .build();
 
         Log.v(TAG, "publisherId" + customerID);
@@ -86,46 +64,19 @@ public class ComScorePlugin extends CordovaPlugin {
         Analytics.start(this.webView.getContext());
         callbackContext.success("ok");
     }
-
-    private void setAppName(String appName, CallbackContext callbackContext) {
-        //Analytics.setAppName(appName);
-        Log.v(TAG, "setAppName");
-        callbackContext.success("ok");
-
-    }
-
-    private void setAppContext(CallbackContext callbackContext) {
-        //Analytics.setAppContext(this.webView.getContext());
-        Log.v(TAG, "setAppContext");
-        callbackContext.success("ok");
-    }
-
+    
     private void onEnterForeground(CallbackContext callbackContext) {
-        //comScore.onEnterForeground();
-        //Analytics.notifyEnterForeground();
+        Analytics.notifyEnterForeground();
         Log.v(TAG, "onEnterForeground");
         callbackContext.success("ok");
     }
 
     private void onExitForeground(CallbackContext callbackContext) {
-        //comScore.onExitForeground();
-        //Analytics.notifyExitForeground();
+        Analytics.notifyExitForeground();
         Log.v(TAG, "onExitForeground");
         callbackContext.success("ok");
     }
-
-    private void autoUpdateForeground(Integer interval, CallbackContext callbackContext) {
-        //Analytics.enableAutoUpdate(interval, true);
-        Log.v(TAG, "autoUpdateForeground");
-        callbackContext.success("ok");
-    }
-
-    private void autoUpdateBackground(Integer interval, CallbackContext callbackContext) {
-        //Analytics.enableAutoUpdate(interval, false);
-        Log.v(TAG, "autoUpdateBackground");
-        callbackContext.success("ok");
-    }
-
+    
     private void start(CallbackContext callbackContext) {
         Analytics.start(this.webView.getContext());
         Log.v(TAG, "start");

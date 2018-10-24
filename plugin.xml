@@ -30,7 +30,6 @@
         </config-file>
 
         <source-file src="src/android/ComScorePlugin.java" target-dir="src/com/comscoreplugin" />
-        <!--<source-file src="src/android/comScore-Android-simple-5.7.0.180306.aar" target-dir="libs" framework="true" />-->
         <framework src="src/android/comScore.gradle" custom="true" type="gradleReference" />
         <resource-file src="src/android/comScore.aar" target="libs/comScore.aar" />
      </platform>

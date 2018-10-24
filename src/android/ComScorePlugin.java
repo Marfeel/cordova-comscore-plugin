@@ -37,6 +37,11 @@ public class ComScorePlugin extends CordovaPlugin {
             this.onExitForeground(callbackContext);
             result = true;
         }
+        else if (START.equals(action)) {
+            this.start(callbackContext);
+            result = true;
+        }
+
 
         return result;
     }
@@ -56,7 +61,6 @@ public class ComScorePlugin extends CordovaPlugin {
         Log.v(TAG, "publisherId" + customerID);
         Log.v(TAG, "publisherSecret " + customerKey);
         Analytics.getConfiguration().addClient(myPublisherConfig);
-        Analytics.start(this.webView.getContext());
         callbackContext.success("ok");
     }
     
@@ -69,6 +73,12 @@ public class ComScorePlugin extends CordovaPlugin {
     private void onExitForeground(CallbackContext callbackContext) {
         Analytics.notifyExitForeground();
         Log.v(TAG, "onExitForeground");
+        callbackContext.success("ok");
+    }
+    
+    private void start(CallbackContext callbackContext) {
+        Analytics.start(this.webView.getContext());
+        Log.v(TAG, "start");
         callbackContext.success("ok");
     }
 }

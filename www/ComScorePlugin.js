@@ -9,6 +9,9 @@ var ComScorePlugin = {
 	},
 	onExitForeground: function (success, error) {
 		cordova.exec(success, error, 'ComScorePlugin', 'onExitForeground', []);
+	},
+	start: function (success, error) {
+		cordova.exec(success, error, 'ComScorePlugin', 'start', []);
 	}
 };
 

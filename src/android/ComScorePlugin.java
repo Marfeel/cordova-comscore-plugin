@@ -18,7 +18,8 @@ public class ComScorePlugin extends CordovaPlugin {
     public static final String ONENTERFOREGROUND = "onEnterForeground";
     public static final String ONEXITFOREGROUND = "onExitForeground";
     public static final String START = "start";
-
+    public static final String UPDATECONSENT = "updateConsent";
+    private String customerID;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -41,6 +42,10 @@ public class ComScorePlugin extends CordovaPlugin {
             this.start(callbackContext);
             result = true;
         }
+        else if (UPDATECONSENT.equals(action)) {
+            this.updateConsent(args.getString(0), callbackContext);
+            result = true;
+        }
 
 
         return result;
@@ -57,7 +62,8 @@ public class ComScorePlugin extends CordovaPlugin {
                 .publisherSecret(customerKey)
                 .usagePropertiesAutoUpdateMode(FOREGROUND_ONLY)
                 .build();
-
+        this.customerID = customerID;
+        
         Log.v(TAG, "publisherId" + customerID);
         Log.v(TAG, "publisherSecret " + customerKey);
         Analytics.getConfiguration().addClient(myPublisherConfig);
@@ -79,6 +85,13 @@ public class ComScorePlugin extends CordovaPlugin {
     private void start(CallbackContext callbackContext) {
         Analytics.start(this.webView.getContext());
         Log.v(TAG, "start");
+        callbackContext.success("ok");
+    }
+    
+    private void updateConsent(String consentValue, CallbackContext callbackContext) {
+        Analytics.getConfiguration().getPublisherConfiguration(this.customerID).setPersistentLabel("cs_ucfr", consentValue); 
+        Analytics.notifyHiddenEvent();
+        Log.v(TAG, "updateConsent");
         callbackContext.success("ok");
     }
 }

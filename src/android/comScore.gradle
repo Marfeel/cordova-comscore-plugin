@@ -1,0 +1,26 @@
+allprojects {
+    repositories {
+        maven {
+            url "https://comscore.bintray.com/Analytics"
+        }
+    }
+}
+
+repositories{
+    jcenter()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compile "com.comscore:android-analytics:5.+"
+}
+
+
+android {
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+}
